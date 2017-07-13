@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace ItemFrormSelectApplication
 {
@@ -34,6 +35,99 @@ namespace ItemFrormSelectApplication
             label2.Tag = new AnimateItem(label2);
             label3.Tag = new AnimateItem(label3);
             label4.Tag = new AnimateItem(label4);
+
+            readProperties();
+
+            label1.ForeColor = leaveBack;
+            label2.ForeColor = leaveBack;
+            label3.ForeColor = leaveBack;
+            label4.ForeColor = leaveBack;
+        }
+
+        private void readProperties()
+        {
+            XmlTextReader reader = new XmlTextReader("./appprops/data.xml");
+            String tek = "";
+            while (reader.Read())
+            {
+               
+                // Обработка данных.
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element: // Узел является элементом.
+                        Console.Write("<" + reader.Name);
+                        Console.WriteLine(">");
+                        if (reader.Name == "item")
+                            readPropertiesItem(reader);
+                        else
+                         if (reader.Name == "color")
+                            readPropertiesColor(reader);
+                        tek = reader.Name;
+                        break;
+                    case XmlNodeType.Text: // Вывести текст в каждом элементе.
+                        Console.WriteLine(reader.Value);
+                        break;
+                    case XmlNodeType.EndElement: // Вывести конец элемента.
+                        Console.Write("</" + reader.Name);
+                        Console.WriteLine(">");
+                        break;
+                }
+            }
+            Console.ReadLine();
+        }
+
+        private void readPropertiesColor(XmlTextReader reader)
+        {
+            while (reader.Read())
+            {
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element: // Узел является элементом.
+                        if (reader.Name == "hover")
+                            readPropertyColorHover(reader);
+                        else if (reader.Name == "leave")
+                            readPropertyColorLeave(reader);
+                        break;
+
+                    case XmlNodeType.EndElement: // Вывести конец элемента.
+                        return;
+                }
+            }
+        }
+
+        private void readPropertyColorLeave(XmlTextReader reader)
+        {
+            String value = reader.GetAttribute("value");
+            leaveBack= ColorTranslator.FromHtml(value);
+        }
+
+        private void readPropertyColorHover(XmlTextReader reader)
+        {
+            String value = reader.GetAttribute("value");
+            hoverBack = ColorTranslator.FromHtml(value);
+        }
+
+        private void readPropertiesItem(XmlTextReader reader)
+        {
+            String title = reader.GetAttribute("title");
+            String path = reader.GetAttribute("path");
+            switch (reader.GetAttribute("name"))
+            {
+                case "One":
+                    label1.Text = title;
+                    break;
+                case "Two":
+                    label2.Text = title;
+                    break;
+                case "Three":
+                    label3.Text = title;
+                    break;
+                case "Four":
+                    label4.Text = title;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

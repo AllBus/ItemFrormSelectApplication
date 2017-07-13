@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+  <folders>
+    <item name="One" title="First" path="Control"/>
+    <item name="Two" title="Second" path="Base"/>
+    <item name="Three" title="Third" path="Drive"/>
+    <item name="Four" title="Fourth" path="Books"/>
+  </folders>
+  <background image="alpha.jpg"/>
+  <link>
+    <color>
+      <hover value="#FFFF00"/>
+      <leave value="#FF00FF"/>
+    </color>
+  </link>
+</data>
