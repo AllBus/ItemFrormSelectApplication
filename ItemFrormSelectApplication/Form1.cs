@@ -59,9 +59,10 @@ namespace ItemFrormSelectApplication
                         Console.WriteLine(">");
                         if (reader.Name == "item")
                             readPropertiesItem(reader);
-                        else
-                         if (reader.Name == "color")
+                        else if (reader.Name == "color")
                             readPropertiesColor(reader);
+                        else if (reader.Name == "background")
+                            readPropertiesBackground(reader);
                         tek = reader.Name;
                         break;
                     case XmlNodeType.Text: // Вывести текст в каждом элементе.
@@ -76,6 +77,17 @@ namespace ItemFrormSelectApplication
             Console.ReadLine();
         }
 
+        private void readPropertiesBackground(XmlTextReader reader)
+        {
+                       
+            String value = reader.GetAttribute("color");
+            if (value!=null && value.Length>0)
+                this.BackColor= ColorTranslator.FromHtml(value);
+
+            String image = "./appprops/"+ reader.GetAttribute("image");
+            this.BackgroundImage = Image.FromFile(image);
+        }
+
         private void readPropertiesColor(XmlTextReader reader)
         {
             while (reader.Read())
@@ -87,6 +99,7 @@ namespace ItemFrormSelectApplication
                             readPropertyColorHover(reader);
                         else if (reader.Name == "leave")
                             readPropertyColorLeave(reader);
+
                         break;
 
                     case XmlNodeType.EndElement: // Вывести конец элемента.
